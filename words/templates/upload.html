@@ -1,0 +1,123 @@
+<!-- fileupload/templates/fileupload/upload.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Text File</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        /* Styling the form and the results section */
+        .form-container {
+            width: 45%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form input[type="file"] {
+            display: block;
+            margin: 20px 0;
+        }
+
+        form button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Styling the file preview section */
+        .preview-container {
+            width: 45%;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .preview-container h2 {
+            text-align: left;
+            color: #444;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow-y: scroll;
+            white-space: pre-wrap; /* Preserve formatting and word wrapping */
+        }
+
+        /* Aligning analysis results */
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #d4edda;
+            border-radius: 8px;
+            color: #155724;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Upload a Text File</h1>
+
+    <div class="container">
+        <!-- Form and analysis result section -->
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+
+            {% if analysis %}
+            <div class="results">
+                <h2>Analysis Results:</h2>
+                <p><strong>Lines:</strong> {{ analysis.lines }}</p>
+                <p><strong>Words:</strong> {{ analysis.words }}</p>
+                <p><strong>Characters:</strong> {{ analysis.characters }}</p>
+            </div>
+            <a href="{% url 'words:download_file' analysis.id %}" class="btn btn-success">Download File</a>
+            {% endif %}
+
+        </div>
+
+        <!-- Preview section for the uploaded file -->
+        <div class="preview-container">
+            <h2>File Preview:</h2>
+
+            {% if file_content %}
+            <pre>{{ file_content }}</pre>
+            {% else %}
+            <p>No file uploaded yet. Your uploaded file preview will appear here.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
